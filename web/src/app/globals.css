@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ===== 自然极简配色：米白 + 深墨绿(forest) + 卡其(khaki) ===== */
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Arial, sans-serif;
+
+  --color-forest-50: #f3f6f2;
+  --color-forest-100: #e6ebe3;
+  --color-forest-200: #cdd8c9;
+  --color-forest-300: #a9bda3;
+  --color-forest-400: #80997b;
+  --color-forest-500: #607a5c;
+  --color-forest-600: #496247;
+  --color-forest-700: #3a4f3a;
+  --color-forest-800: #2f4030;
+  --color-forest-900: #273529;
+
+  --color-khaki-100: #ece5d3;
+  --color-khaki-300: #cfc19c;
+  --color-khaki-500: #a99772;
+  --color-khaki-700: #8a7753;
+
+  --color-paper: #f7f6f1;
+  --color-night: #131610;
+}
+
+:root {
+  color-scheme: light;
+  background-color: var(--color-paper);
+}
+
+.dark {
+  color-scheme: dark;
+  background-color: var(--color-night);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 通用工具 ===== */
+.container-page {
+  @apply mx-auto w-full max-w-5xl px-5 sm:px-8;
+}
+
+.card {
+  @apply rounded-2xl border border-stone-200/80 bg-white shadow-sm transition
+    hover:-translate-y-0.5 hover:shadow-md dark:border-stone-700/60
+    dark:bg-stone-900/60;
+}
+
+.section-title {
+  @apply text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-500;
+}
+
+/* ===== 渐变文字（克制的墨绿→卡其） ===== */
+.text-gradient {
+  @apply bg-gradient-to-r from-forest-700 via-forest-600 to-khaki-500
+    bg-clip-text text-transparent dark:from-forest-400 dark:via-forest-300
+    dark:to-khaki-300;
+}
+
+/* ===== 链接 ===== */
+.link-underline {
+  @apply underline decoration-stone-300 decoration-2 underline-offset-4
+    transition hover:decoration-forest-500 dark:decoration-stone-600;
+}
+
+/* ===== 徽章 ===== */
+.chip {
+  @apply inline-flex items-center rounded-full border border-stone-200 px-3 py-1
+    text-xs font-medium text-stone-600 dark:border-stone-700 dark:text-stone-300;
+}
+
+/* ===== 户外板块卡片 ===== */
+.outdoor-card {
+  @apply relative overflow-hidden rounded-2xl border border-stone-200 bg-white
+    p-6 transition hover:-translate-y-0.5 hover:shadow-md dark:border-stone-700/60
+    dark:bg-stone-900/60;
+}
+
+/* ===== 博客正文 ===== */
+.markdown-body {
+  @apply text-[15.5px] leading-7 text-stone-700 dark:text-stone-300;
+}
+.markdown-body > * + * {
+  @apply mt-5;
+}
+.markdown-body h1 {
+  @apply mt-10 text-3xl font-bold text-stone-900 dark:text-stone-100;
+}
+.markdown-body h2 {
+  @apply mt-10 text-2xl font-bold text-stone-900 dark:text-stone-100;
+}
+.markdown-body h3 {
+  @apply mt-8 text-xl font-semibold text-stone-900 dark:text-stone-100;
+}
+.markdown-body h4 {
+  @apply mt-6 text-lg font-semibold text-stone-900 dark:text-stone-100;
+}
+.markdown-body a {
+  @apply font-medium text-forest-700 underline decoration-forest-300
+    underline-offset-4 hover:decoration-forest-600 dark:text-forest-400
+    dark:decoration-forest-700;
+}
+.markdown-body strong {
+  @apply font-semibold text-stone-900 dark:text-stone-100;
+}
+.markdown-body ul {
+  @apply list-disc pl-6;
+}
+.markdown-body ol {
+  @apply list-decimal pl-6;
+}
+.markdown-body li {
+  @apply my-1.5;
+}
+.markdown-body blockquote {
+  @apply border-l-4 border-khaki-500 bg-khaki-100/50 px-4 py-2 text-stone-500
+    italic dark:border-khaki-500/60 dark:bg-khaki-500/10 dark:text-stone-400;
+}
+.markdown-body code {
+  @apply rounded bg-stone-100 px-1.5 py-0.5 font-mono text-[0.85em]
+    text-forest-700 dark:bg-stone-800 dark:text-forest-300;
+}
+.markdown-body pre {
+  @apply overflow-x-auto rounded-xl border border-stone-200 bg-stone-900 p-4
+    text-sm text-stone-100 dark:border-stone-700;
+}
+.markdown-body pre code {
+  @apply bg-transparent p-0 font-mono text-inherit;
+}
+.markdown-body hr {
+  @apply border-stone-200 dark:border-stone-700;
+}
+.markdown-body img {
+  @apply rounded-xl border border-stone-200 dark:border-stone-700;
+}
+.markdown-body table {
+  @apply w-full border-collapse text-sm;
+}
+.markdown-body th {
+  @apply border border-stone-200 bg-stone-50 px-3 py-2 text-left font-semibold
+    dark:border-stone-700 dark:bg-stone-800/60;
+}
+.markdown-body td {
+  @apply border border-stone-200 px-3 py-2 dark:border-stone-700;
+}

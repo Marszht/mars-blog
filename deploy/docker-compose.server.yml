@@ -1,0 +1,22 @@
+# 阿里云服务器专用 compose（与 deploy/Dockerfile 配套）
+# 说明：服务器 80/443 已被现有 nginx 占用，故不带 Caddy，
+#       由现有 nginx 反代（见 /opt/nginx-conf/marsmz.top.conf）。
+# 用法：docker compose -f docker-compose.server.yml up -d --build
+services:
+  mars-site:
+    build:
+      context: ./web
+      dockerfile: ../deploy/Dockerfile
+      args:
+        # 百度统计 ID（可选，留空则不加载统计）
+        NEXT_PUBLIC_BAIDU_ANALYTICS_ID: ${NEXT_PUBLIC_BAIDU_ANALYTICS_ID:-}
+    image: mars-site:latest
+    restart: unless-stopped
+    expose:
+      - "3000"
+    networks:
+      - opt_default
+
+networks:
+  opt_default:
+    external: true

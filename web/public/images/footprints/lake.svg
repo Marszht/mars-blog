@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#e6e9dd"/>
+  <path d="M0 360 Q200 320 400 350 T800 340 L800 600 L0 600 Z" fill="#607a5c"/>
+  <path d="M0 420 Q300 380 800 420 L800 600 L0 600 Z" fill="#496247"/>
+  <path d="M0 500 Q400 470 800 500 L800 600 L0 600 Z" fill="#2f4030" opacity="0.8"/>
+  <ellipse cx="380" cy="520" rx="200" ry="34" fill="#cfc19c" opacity="0.5"/>
+  <ellipse cx="380" cy="500" rx="90" ry="16" fill="#ece5d3" opacity="0.6"/>
+</svg>
