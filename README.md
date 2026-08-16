@@ -115,7 +115,7 @@ npm run dev
 
 ## 部署到阿里云（免费 HTTPS）
 
-> ⚠️ **服务器实际情况**：目标服务器（8.148.181.40）上 **80/443 已被现有 nginx 反代占用**（管理着 ai.marsmz.com、perler.marsmz.top、qinglong 等站点），因此本站**不使用项目自带的 Caddy**，而是复用现有 nginx 反代体系。本项目的 `deploy/docker-compose.yml`（含 Caddy）保留作为"全新服务器"的部署方案；阿里云服务器请使用 `deploy/docker-compose.server.yml`。
+> ⚠️ **服务器实际情况**：目标服务器（8.148.181.40）上 **80/443 已被现有 nginx 反代占用**（管理着 ai.marsmz.com、perler.marsmz.top、qinglong 等站点），因此本站**复用现有 nginx 反代体系**，用 `deploy/docker-compose.server.yml` 部署（只跑站点容器，不含 Caddy）。
 
 ### 阿里云服务器（复用现有 nginx 反代）
 
@@ -148,11 +148,43 @@ nginx 反代配置同步自 `deploy/marsmz.top.conf`（80→301，443 SSL 反代
 
 ## 访问统计（百度统计，免费）
 
-网站在不配置统计时**不加载任何统计脚本**。需要统计时：
+网站在不配置统计时**不加载任何统计脚本**。启用步骤：
 
-1. 注册百度统计并创建站点，拿到 HM 代码里的 ID
-2. 本地：在 `web/.env.local` 写 `NEXT_PUBLIC_BAIDU_ANALYTICS_ID=你的ID`
-3. 服务器：在 `deploy/.env` 写同一变量，然后 `docker compose up -d --build`
+**1. 拿到统计 ID**
+
+登录 [百度统计](https://tongji.baidu.com/) → 「管理」→「网站列表」→ 找到 marsmz.top → 「获取代码」，
+代码形如：
+
+```html
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?abc123def456789...";  // ← 问号后这串就是统计 ID
+  ...
+})();
+</script>
+```
+
+**只需要问号后面那串 32 位字符**，不用复制整段代码（站点已内置注入逻辑）。
+
+**2. 填入配置**
+
+- 本地：`web/.env.local` 写 `NEXT_PUBLIC_BAIDU_ANALYTICS_ID=你的ID`
+- 服务器：`/opt/mars-site/.env` 写同一行
+
+**3. 重新构建（关键）**
+
+```bash
+docker compose up -d --build
+```
+
+> ⚠️ `NEXT_PUBLIC_*` 变量是 **构建时内联** 到 JS 里的，改了环境变量**不重新 build 不会生效**。
+
+**4. 验证**
+
+浏览器打开网站 → F12 →「网络」筛 `hm.js`，能看到对 `hm.baidu.com/hm.js?你的ID` 的请求即成功；
+百度统计后台在「实时访客」里通常几分钟内出现数据（首次接入可能需要等 20 分钟左右）。
 
 > 按国内规定，建议 ICP 备案通过后再启用统计。
 
