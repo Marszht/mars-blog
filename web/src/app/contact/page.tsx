@@ -16,7 +16,7 @@ export default function ContactPage() {
     {
       emoji: "💬",
       title: "GitHub",
-      value: "github.com/zhu1090093659",
+      value: "github.com/Marszht",
       href: site.github,
       desc: "看看代码，一起维护开源项目",
     },

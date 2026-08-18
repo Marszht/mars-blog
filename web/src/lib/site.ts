@@ -7,7 +7,7 @@ export const site = {
   description:
     "Mars MZ 的个人网站：一名热爱技术的程序员，也是户外与运动爱好者。记录技术思考、骑行徒步、羽毛球训练与日常足迹。",
   email: "hi@marsmz.top",
-  github: "https://github.com/zhu1090093659",
+  github: "https://github.com/Marszht",
   location: "广州",
   keywords: [
     "程序员",

@@ -148,7 +148,8 @@ nginx 反代配置同步自 `deploy/marsmz.top.conf`（80→301，443 SSL 反代
 
 ## 访问统计（百度统计，免费）
 
-网站在不配置统计时**不加载任何统计脚本**。启用步骤：
+主站已配置统计 ID（`deploy/.env.example` 与本地 `web/.env.local` 已填入 `b20d77ed3d94cfe964b20eeb5c99667e`）。
+网站在未配置统计 ID 时**不加载任何统计脚本**。启用/更换 ID 的步骤：
 
 **1. 拿到统计 ID**
 
@@ -170,8 +171,8 @@ var _hmt = _hmt || [];
 
 **2. 填入配置**
 
-- 本地：`web/.env.local` 写 `NEXT_PUBLIC_BAIDU_ANALYTICS_ID=你的ID`
-- 服务器：`/opt/mars-site/.env` 写同一行
+- 本地：`web/.env.local` 写 `NEXT_PUBLIC_BAIDU_ANALYTICS_ID=你的ID`（当前已填好）
+- 服务器：`/opt/mars-site/.env` 写同一行（或直接用 `./deploy.sh` 同步，它会带上 `web/.env.local`）
 
 **3. 重新构建（关键）**
 
@@ -187,6 +188,14 @@ docker compose up -d --build
 百度统计后台在「实时访客」里通常几分钟内出现数据（首次接入可能需要等 20 分钟左右）。
 
 > 按国内规定，建议 ICP 备案通过后再启用统计。
+
+### perler.marsmz.top（拼豆图纸生成器）的统计
+
+拼豆站点是独立的 Node.js 单页应用（仓库 `Marszht/preler-webapp`），配置方式：
+
+1. 在 [百度统计](https://tongji.baidu.com/) 「管理 → 网站列表」里**新增一个站点**（域名写 `perler.marsmz.top`），拿到它自己的统计 ID（两个站点 ID 不同）
+2. 在服务器上给拼豆容器的环境变量加上 `BAIDU_ANALYTICS_ID=你的ID`（在 compose 文件的 `perler-webapp` 服务的 `environment` 里加一行），然后 `docker compose up -d --build` 重建容器
+3. 验证：打开 https://perler.marsmz.top → F12 → 网络筛 `hm.js`
 
 ## 设计
 
