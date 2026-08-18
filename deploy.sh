@@ -10,6 +10,8 @@
 #   1. 本机已配置 SSH 免密登录（或会提示输入密码）
 #   2. 服务器已有 /opt/mars-site 与 /opt/nginx-conf（首次见 README 部署章节）
 #   3. 服务器 80/443 由 nginx 占用，本站通过现有 nginx 反代（非 Caddy）
+#
+# 传输方式：tar + scp（不依赖 rsync，本地与服务器都无需安装 rsync）
 # ============================================================
 set -euo pipefail
 
@@ -26,17 +28,27 @@ COMPOSE_SRC="${PROJECT_DIR}/deploy/docker-compose.server.yml"
 NGINX_CONF_SRC="${PROJECT_DIR}/deploy/marsmz.top.conf"   # 可选，若存在则同步
 NGINX_REMOTE="/opt/nginx-conf/marsmz.top.conf"
 
-echo "==> [1/4] 同步 web 源码 -> ${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/web"
-rsync -az --delete \
-  -e "ssh ${SSH_OPTS}" \
-  --exclude node_modules --exclude .next --exclude .git --exclude .npm-cache \
-  "${WEB_SRC}/" "${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/web/"
+# 本地临时打包文件
+TARBALL="$(mktemp /tmp/mars-site-web.XXXXXX.tgz)"
+
+echo "==> [1/4] 打包并同步 web 源码 -> ${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/web"
+# 本地打包（排除依赖/构建产物/缓存；.env.local 会一并带上，供构建期内联统计 ID）
+tar -C "${WEB_SRC}" \
+  --exclude=node_modules --exclude=.next --exclude=.git --exclude=.npm-cache \
+  -czf "${TARBALL}" .
+
+# 上传到服务器临时目录，解压到 web.new 后再原子替换，避免半成品状态
+scp ${SSH_OPTS} "${TARBALL}" "${REMOTE_USER}@${SERVER}:/tmp/mars-site-web.tgz"
+ssh ${SSH_OPTS} "${REMOTE_USER}@${SERVER}" \
+  "rm -rf ${REMOTE_DIR}/web.new && mkdir -p ${REMOTE_DIR}/web.new && \
+   tar -xzf /tmp/mars-site-web.tgz -C ${REMOTE_DIR}/web.new && \
+   rm -rf ${REMOTE_DIR}/web && mv ${REMOTE_DIR}/web.new ${REMOTE_DIR}/web && \
+   rm -f /tmp/mars-site-web.tgz"
+rm -f "${TARBALL}"
 
 echo "==> [2/4] 同步部署文件 -> ${REMOTE_DIR}/deploy"
 ssh ${SSH_OPTS} "${REMOTE_USER}@${SERVER}" "mkdir -p ${REMOTE_DIR}/deploy"
-rsync -az \
-  -e "ssh ${SSH_OPTS}" \
-  "${DOCKERFILE_SRC}" "${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/deploy/Dockerfile"
+scp ${SSH_OPTS} "${DOCKERFILE_SRC}" "${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/deploy/Dockerfile"
 scp ${SSH_OPTS} "${COMPOSE_SRC}" "${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/docker-compose.yml"
 
 # 可选：同步 nginx 配置（若本地存在）
