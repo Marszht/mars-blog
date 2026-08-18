@@ -48,6 +48,7 @@ export function getAllFootprints(): Footprint[] {
 export function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "";
   return d.toLocaleDateString("zh-CN", {
     year: "numeric",
     month: "long",
@@ -58,6 +59,7 @@ export function formatDate(dateStr: string): string {
 export function formatFeedDate(dateStr: string): string {
   if (!dateStr) return "";
   const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "";
   const now = new Date();
   const diffMs = now.getTime() - d.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
