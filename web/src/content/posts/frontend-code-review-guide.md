@@ -62,7 +62,7 @@ lint -> type-check -> test -> build -> security scan
 
 人工阶段包含两个动作：作者先按最终 diff 自查，再由 Reviewer 审查。作者自查经常能发现调试代码、无关文件和描述遗漏；Reviewer 则从“另一位维护者”的视角检查逻辑、风险与设计。
 
-发现问题后，作者更新改动，CI 重新运行，Reviewer 只需重点复核新的变化和受影响路径。平台上的评论、批准与请求修改只是状态表达，真正的完成条件应由团队规则定义。可以参考 GitHub 的 [Pull request review 文档](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews)。
+发现问题后，作者更新改动，CI 重新运行，Reviewer 只需重点复核新的变化和受影响路径。平台上的评论、批准与请求修改只是状态表达，真正的完成条件应由团队规则定义。可以参考 GitHub 的 [Pull request review 文档](https://docs.github.com/en/pull-requests/reference/pull-request-reviews)。
 
 ### 阶段四：合并
 
