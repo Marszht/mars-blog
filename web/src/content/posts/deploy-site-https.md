@@ -87,20 +87,55 @@ networks:
 docker compose -f deploy/docker-compose.server.yml up -d --build
 ```
 
-几个最常用的 Docker 命令也一起记下：
+### Docker 常用命令
+
+为了避免反复输入 Compose 文件路径，我会先定义一个变量；下面的命令都默认在项目根目录执行：
 
 ```bash
-# 查看容器状态
-docker compose -f deploy/docker-compose.server.yml ps
+COMPOSE="docker compose -f deploy/docker-compose.server.yml"
+```
 
-# 持续查看应用日志
-docker compose -f deploy/docker-compose.server.yml logs -f mars-site
+| 场景 | 命令 |
+| --- | --- |
+| 首次部署或更新代码 | `$COMPOSE up -d --build` |
+| 查看服务状态 | `$COMPOSE ps` |
+| 查看最近日志 | `$COMPOSE logs --tail=100 mars-site` |
+| 持续追踪日志 | `$COMPOSE logs -f mars-site` |
+| 重启应用容器 | `$COMPOSE restart mars-site` |
+| 只重新构建镜像 | `$COMPOSE build --no-cache mars-site` |
+| 停止并删除本 Compose 创建的容器 | `$COMPOSE down` |
 
-# 重新构建并后台启动（更新代码后常用）
-docker compose -f deploy/docker-compose.server.yml up -d --build
+对应的可复制命令如下：
 
-# 停止并删除本 Compose 创建的容器
-docker compose -f deploy/docker-compose.server.yml down
+```bash
+# 首次部署或更新代码：构建最新镜像并在后台启动
+$COMPOSE up -d --build
+
+# 查看服务状态、最近 100 行日志，或持续追踪日志
+$COMPOSE ps
+$COMPOSE logs --tail=100 mars-site
+$COMPOSE logs -f mars-site
+
+# 应用临时卡住时重启；需要彻底重新构建时跳过 Docker 构建缓存
+$COMPOSE restart mars-site
+$COMPOSE build --no-cache mars-site
+$COMPOSE up -d
+
+# 停止并删除本 Compose 创建的容器（不会删除镜像或外部网络）
+$COMPOSE down
+```
+
+另外几条排查容器与网络的原生命令也很有用：
+
+```bash
+# 列出正在运行的容器，并显示名称、镜像和端口
+docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}'
+
+# 查看 mars-site 容器的详细配置与网络信息
+docker inspect mars-site
+
+# 确认外部网络中同时存在 Nginx 和 mars-site
+docker network inspect opt_default
 ```
 
 > `mars-site` 必须和 Nginx 加入同一个 `opt_default` 网络，否则 Nginx 无法解析 `mars-site` 这个容器服务名。若 Nginx 安装在宿主机而不是容器内，应改为发布应用端口并代理到 `127.0.0.1:<端口>`，不能直接使用 `mars-site:3000`。
@@ -225,6 +260,45 @@ server {
         proxy_read_timeout 120s;
     }
 }
+```
+
+### Nginx 常用命令
+
+修改 Nginx 配置后，**先执行语法检查，再重载**；`reload` 会平滑加载新配置，通常不会中断正在处理的请求。本文的部署中 Nginx 运行在容器内，先设置实际容器名：
+
+```bash
+# 查看容器名称后，按实际结果修改；例如 nginx 或 opt-nginx-1
+docker ps --format 'table {{.Names}}\t{{.Image}}'
+NGINX_CONTAINER=nginx
+```
+
+```bash
+# 检查完整配置语法；有报错时不要重载
+docker exec "$NGINX_CONTAINER" nginx -t
+
+# 平滑重载配置（修改站点配置、替换证书后常用）
+docker exec "$NGINX_CONTAINER" nginx -s reload
+
+# 查看 Nginx 进程状态与最近日志
+docker exec "$NGINX_CONTAINER" nginx -T
+docker logs --tail=100 "$NGINX_CONTAINER"
+docker logs -f "$NGINX_CONTAINER"
+
+# 重启 Nginx 容器；只有容器异常或需要完整重启时才使用
+docker restart "$NGINX_CONTAINER"
+
+# 进入容器排查配置、证书和 ACME 验证文件
+docker exec -it "$NGINX_CONTAINER" sh
+```
+
+如果 Nginx 直接安装在宿主机而非 Docker 容器中，则替换为系统服务命令：
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+sudo systemctl status nginx --no-pager
+sudo journalctl -u nginx -n 100 --no-pager
+sudo tail -f /var/log/nginx/access.log /var/log/nginx/error.log
 ```
 
 几个关键点：
