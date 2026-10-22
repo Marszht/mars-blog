@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { projects } from "@/lib/projects";
 
-export const metadata: Metadata = { title: "项目" };
+export const metadata: Metadata = {
+  title: "项目",
+  description: "个人项目与正在折腾的东西，更多代码在 GitHub。",
+};
 
 export default function ProjectsPage() {
   return (

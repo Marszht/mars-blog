@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "关于我" };
+export const metadata: Metadata = {
+  title: "关于我",
+  description: "Mars MZ：广州全栈工程师，也骑车、进山、举铁、打球。",
+};
 
 const skills = [
   { name: "TypeScript / JavaScript", level: 90 },

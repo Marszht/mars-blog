@@ -1,0 +1,20 @@
+# 服务器 /opt/clash/docker-compose.yml
+# 启动：docker compose up -d
+# 日志：docker logs -f clash
+# 更新订阅：bash /opt/clash/build-config.sh && docker restart clash
+services:
+  clash:
+    image: metacubex/mihomo:latest
+    container_name: clash
+    restart: unless-stopped
+    volumes:
+      - ./config.yaml:/root/.config/mihomo/config.yaml:ro
+    expose:
+      - "7890"   # HTTP 代理
+      - "7891"   # SOCKS5 代理
+    networks:
+      - opt_default
+
+networks:
+  opt_default:
+    external: true

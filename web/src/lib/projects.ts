@@ -20,7 +20,7 @@ export const projects: Project[] = [
   {
     name: "Mars Site",
     description:
-      "本站：基于 Next.js + Tailwind CSS 的个人网站，含户外运动、足迹动态流与博客，Docker + Caddy 一键部署，全站免费 HTTPS。",
+      "本站：基于 Next.js + Tailwind CSS 的个人网站，含户外运动、足迹动态流与博客，Docker + nginx 一键部署，全站免费 HTTPS。",
     tech: ["Next.js", "Tailwind CSS", "TypeScript", "Docker"],
     href: "https://github.com/Marszht/mars-site",
     featured: true,

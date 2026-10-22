@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <defs><linearGradient id="shuofeng3" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#eadfcf"/><stop offset="1" stop-color="#f5efe4"/>
+  </linearGradient></defs>
+  <rect width="800" height="800" fill="url(#shuofeng3)"/>
+  <path d="M0 480 Q200 450 400 480 T800 480 L800 560 Q400 520 0 560 Z" fill="#a99772" opacity="0.7"/>
+  <path d="M0 520 Q200 440 420 500 T800 480 L800 800 L0 800 Z" fill="#a9bda3"/>
+  <path d="M0 620 Q260 540 540 600 T800 580 L800 800 L0 800 Z" fill="#607a5c"/>
+  <path d="M0 720 Q300 660 800 720 L800 800 L0 800 Z" fill="#273529"/>
+</svg>

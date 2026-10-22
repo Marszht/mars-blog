@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   sports,
   routes,
@@ -6,8 +7,12 @@ import {
   gearList,
   outdoorGoals,
 } from "@/lib/outdoor";
+import { wrappedYear } from "@/lib/wrapped";
 
-export const metadata: Metadata = { title: "户外运动" };
+export const metadata: Metadata = {
+  title: "户外运动",
+  description: "骑行、徒步与羽毛球：路线、装备、运动日志与目标。",
+};
 
 const routeTypeColor: Record<string, string> = {
   骑行: "bg-forest-100 text-forest-700 dark:bg-forest-500/15 dark:text-forest-300",
@@ -28,6 +33,28 @@ export default function OutdoorPage() {
           工作是谋生，户外是生活。骑行、徒步、羽毛球——把身体交给风、山路和球场，
           是我给自己最好的充电方式。这里记录我的运动数据、路线和每一次出发。
         </p>
+      </div>
+
+      {/* 子导航：年度报告 / 旅程地图 / 装备清单 */}
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link
+          href="/outdoor/wrapped"
+          className="rounded-full border border-stone-300 px-4 py-1.5 text-sm text-stone-600 transition hover:border-rust hover:text-rust dark:border-stone-700 dark:text-stone-300"
+        >
+          🏆 {wrappedYear} 年度报告
+        </Link>
+        <Link
+          href="/outdoor/map"
+          className="rounded-full border border-stone-300 px-4 py-1.5 text-sm text-stone-600 transition hover:border-rust hover:text-rust dark:border-stone-700 dark:text-stone-300"
+        >
+          🗺 旅程地图
+        </Link>
+        <Link
+          href="/outdoor/gear"
+          className="rounded-full border border-stone-300 px-4 py-1.5 text-sm text-stone-600 transition hover:border-rust hover:text-rust dark:border-stone-700 dark:text-stone-300"
+        >
+          🎒 装备清单
+        </Link>
       </div>
 
       {/* 三大运动 */}
@@ -74,7 +101,7 @@ export default function OutdoorPage() {
         <h2 className="section-title">经典路线</h2>
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           {routes.map((r) => (
-            <div key={r.name} className="outdoor-card">
+            <Link key={r.slug} href={`/outdoor/${r.slug}`} className="outdoor-card group block">
               <div className="flex items-center justify-between">
                 <span
                   className={`rounded-full px-2.5 py-1 text-xs font-medium ${
@@ -87,7 +114,7 @@ export default function OutdoorPage() {
                   <span className="text-xs text-khaki-700 dark:text-khaki-300">★ 推荐</span>
                 )}
               </div>
-              <h3 className="mt-3 text-lg font-bold">{r.name}</h3>
+              <h3 className="mt-3 text-lg font-bold group-hover:text-forest-700 dark:group-hover:text-forest-300">{r.name}</h3>
               <p className="mt-0.5 text-xs text-stone-400 dark:text-stone-500">{r.region}</p>
               <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-400">
                 {r.desc}
@@ -97,7 +124,10 @@ export default function OutdoorPage() {
                 <span>⏱ {r.duration}</span>
                 {r.elevation && <span>⛰ {r.elevation}</span>}
               </div>
-            </div>
+              <span className="mt-4 inline-block text-sm font-medium text-forest-700 group-hover:translate-x-1 dark:text-forest-300 transition-transform">
+                查看详情 →
+              </span>
+            </Link>
           ))}
         </div>
       </section>
@@ -130,7 +160,12 @@ export default function OutdoorPage() {
       {/* 装备 + 目标 */}
       <div className="mt-14 grid gap-10 lg:grid-cols-2">
         <section>
-          <h2 className="section-title">我的装备</h2>
+          <div className="flex items-baseline justify-between">
+            <h2 className="section-title">我的装备</h2>
+            <Link href="/outdoor/gear" className="text-xs font-medium text-forest-700 hover:underline dark:text-forest-300">
+              全部装备 →
+            </Link>
+          </div>
           <div className="mt-5 space-y-4">
             {gearList.map((g) => (
               <div key={g.name} className="outdoor-card p-5">
@@ -138,7 +173,13 @@ export default function OutdoorPage() {
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-forest-50 text-xl dark:bg-forest-500/10">
                     {g.emoji}
                   </span>
-                  <h3 className="font-bold">{g.name}</h3>
+                  <div className="min-w-0">
+                    <h3 className="truncate font-bold">{g.name}</h3>
+                    <p className="text-xs text-stone-400">
+                      {g.category}
+                      {g.price ? ` · ${g.price}` : ""}
+                    </p>
+                  </div>
                 </div>
                 <p className="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-400">
                   {g.desc}

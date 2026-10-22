@@ -5,6 +5,8 @@ excerpt: "Redux 作者 Dan Abramov 的经典文章翻译：什么时候你真的
 tags:
   - "翻译"
   - "Redux"
+series: "react"
+seriesTitle: "React 系列"
 ---
 
 [译]你可能不需要Redux  

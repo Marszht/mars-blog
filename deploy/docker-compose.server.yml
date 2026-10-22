@@ -7,9 +7,6 @@ services:
     build:
       context: ./web
       dockerfile: ../deploy/Dockerfile
-      args:
-        # 百度统计 ID（可选，留空则不加载统计）
-        NEXT_PUBLIC_BAIDU_ANALYTICS_ID: ${NEXT_PUBLIC_BAIDU_ANALYTICS_ID:-}
     image: mars-site:latest
     restart: unless-stopped
     expose:

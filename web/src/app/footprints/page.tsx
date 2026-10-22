@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { getAllFootprints } from "@/lib/footprints";
 import { FootprintCard } from "@/components/FootprintCard";
 
-export const metadata: Metadata = { title: "足迹" };
+export const metadata: Metadata = {
+  title: "足迹",
+  description: "朋友圈式生活记录：骑行、徒步、训练与日常瞬间。",
+};
 
 export default function FootprintsPage() {
   const footprints = getAllFootprints();
@@ -15,6 +18,15 @@ export default function FootprintsPage() {
         像朋友圈一样的生活记录：骑行、徒步、羽毛球的日常瞬间。每条动态用一个 Markdown
         文件维护，配图会自动排成九宫格。共 {footprints.length} 条。
       </p>
+
+      <div className="mt-6">
+        <a
+          href="/timeline"
+          className="inline-flex items-center gap-1 text-sm font-medium text-forest-700 hover:underline dark:text-forest-300"
+        >
+          按时间线查看全部动态 →
+        </a>
+      </div>
 
       <div className="mx-auto mt-10 max-w-2xl">
         {footprints.map((item) => (

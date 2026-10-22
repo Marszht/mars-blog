@@ -5,6 +5,8 @@ excerpt: "React 官方 issue 中核心开发者 gaearon 的解答：setState 为
 tags:
   - "React"
   - "setState"
+series: "react"
+seriesTitle: "React 系列"
 ---
 
 ### 为什么 setState 是异步的 ？

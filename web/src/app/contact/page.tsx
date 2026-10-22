@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { site } from "@/lib/site";
 import { ContactForm } from "@/components/ContactForm";
 
-export const metadata: Metadata = { title: "联系我" };
+export const metadata: Metadata = {
+  title: "联系我",
+  description: "技术交流、合作或约球，欢迎邮件联系。",
+};
 
 export default function ContactPage() {
   const contactCards = [
@@ -34,8 +37,8 @@ export default function ContactPage() {
       <p className="section-title">Contact</p>
       <h1 className="mt-2 text-3xl font-extrabold sm:text-4xl">联系我</h1>
       <p className="mt-4 max-w-2xl leading-7 text-stone-600 dark:text-stone-400">
-        不管是技术问题、合作机会，还是想约一场球，都很欢迎！直接发邮件最快，
-        或者用下面的表单——它会帮你生成一封邮件。
+        不管是技术问题、合作机会，还是想约一场球，都很欢迎！直接发邮件最快。
+        没有邮件客户端的话，也可以复制邮箱。
       </p>
 
       {/* 联系卡片 */}

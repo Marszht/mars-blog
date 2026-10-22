@@ -11,7 +11,7 @@ node_modules/
 out/
 build/
 
-# 环境变量（含统计 ID 等）
+# 环境变量
 .env
 .env.local
 deploy/.env

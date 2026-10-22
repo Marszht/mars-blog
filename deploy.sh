@@ -32,7 +32,7 @@ NGINX_REMOTE="/opt/nginx-conf/marsmz.top.conf"
 TARBALL="$(mktemp /tmp/mars-site-web.XXXXXX.tgz)"
 
 echo "==> [1/4] 打包并同步 web 源码 -> ${REMOTE_USER}@${SERVER}:${REMOTE_DIR}/web"
-# 本地打包（排除依赖/构建产物/缓存；.env.local 会一并带上，供构建期内联统计 ID）
+# 本地打包（排除依赖/构建产物/缓存）
 tar -C "${WEB_SRC}" \
   --exclude=node_modules --exclude=.next --exclude=.git --exclude=.npm-cache \
   -czf "${TARBALL}" .

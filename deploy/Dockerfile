@@ -2,13 +2,9 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# 百度统计 ID（构建期内联，可选）。默认空 = 不加载统计
-ARG NEXT_PUBLIC_BAIDU_ANALYTICS_ID=""
-ENV NEXT_PUBLIC_BAIDU_ANALYTICS_ID=$NEXT_PUBLIC_BAIDU_ANALYTICS_ID
-
 # 先装依赖，利用缓存
 COPY package.json package-lock.json* ./
-RUN npm ci || npm install
+RUN npm ci
 
 # 再拷源码构建
 COPY . .

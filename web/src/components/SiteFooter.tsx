@@ -23,7 +23,13 @@ export function SiteFooter() {
             </Link>
           ))}
         </nav>
-        <p className="text-xs">Powered by Next.js · 山在那里，我这就去 ⛰️</p>
+        <p className="text-xs">
+          <a href="/rss.xml" className="hover:text-forest-700 dark:hover:text-forest-300">
+            RSS
+          </a>
+          {" · "}
+          Powered by Next.js · 山在那里，我这就去 ⛰️
+        </p>
       </div>
     </footer>
   );

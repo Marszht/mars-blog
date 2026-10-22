@@ -6,6 +6,8 @@ tags:
   - "翻译"
   - "React"
   - "派生状态"
+series: "react"
+seriesTitle: "React 系列"
 ---
 
 ### 【译】你可能不需要派生状态

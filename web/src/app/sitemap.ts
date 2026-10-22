@@ -1,35 +1,47 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/lib/site";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getAllSeries } from "@/lib/posts";
+import { getAllFootprints } from "@/lib/footprints";
+import { routes } from "@/lib/outdoor";
+import { parseDate } from "@/lib/date";
+import { siteUrl } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = `https://${site.domain}`;
-  const staticRoutes = [
-    "",
-    "/about",
-    "/outdoor",
-    "/footprints",
-    "/blog",
-    "/projects",
-    "/contact",
+  const posts = getAllPosts();
+  const footprints = getAllFootprints();
+  const latestPost = posts[0]?.date;
+  const latestFootprint = footprints[0]?.date;
+
+  const staticRoutes: { path: string; lastModified?: string }[] = [
+    { path: "", lastModified: latestPost },
+    { path: "/about" },
+    { path: "/outdoor" },
+    { path: "/outdoor/wrapped" },
+    { path: "/outdoor/map" },
+    { path: "/outdoor/gear" },
+    { path: "/footprints", lastModified: latestFootprint },
+    { path: "/timeline" },
+    { path: "/blog", lastModified: latestPost },
+    { path: "/blog/series" },
+    { path: "/now" },
+    { path: "/projects" },
+    { path: "/contact" },
   ];
-  const posts = getAllPosts()
-    // 防御：过滤掉日期为空或无效的文章，避免 new Date(...).toISOString() 抛 RangeError
-    .filter((p) => {
-      if (!p.date) return false;
-      const d = new Date(p.date);
-      return !Number.isNaN(d.getTime());
-    })
-    .map((p) => ({
-      url: `${base}/blog/${p.slug}`,
-      lastModified: new Date(p.date),
-    }));
 
   return [
     ...staticRoutes.map((r) => ({
-      url: `${base}${r}`,
-      lastModified: new Date(),
+      url: `${siteUrl}${r.path}`,
+      lastModified: parseDate(r.lastModified ?? "") ?? undefined,
     })),
-    ...posts,
+    ...routes.map((r) => ({
+      url: `${siteUrl}/outdoor/${r.slug}`,
+    })),
+    ...getAllSeries().map((s) => ({
+      url: `${siteUrl}/blog/series/${s.key}`,
+    })),
+    ...posts.flatMap((p) => {
+      const d = parseDate(p.date);
+      if (!d) return [];
+      return [{ url: `${siteUrl}/blog/${p.slug}`, lastModified: d }];
+    }),
   ];
 }

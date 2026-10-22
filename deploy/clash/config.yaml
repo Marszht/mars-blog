@@ -1,0 +1,35 @@
+# Clash 代理配置 — 仅供 cpa 容器访问 codex/openai 使用
+# 路径：/opt/clash/config.yaml
+port: 7890
+socks-port: 7891
+allow-lan: false          # 仅本机容器可访问，不暴露到宿主机外
+mode: rule
+log-level: info
+
+# 从订阅链接自动拉取节点
+proxy-providers:
+  default:
+    type: http
+    url: "https://45.137.181.201/666/9i5rx1nlgnngMlz?clash=1"
+    interval: 3600
+    path: ./providers/default.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: https://www.gstatic.com/generate_204
+
+proxy-groups:
+  - name: "Proxy"
+    type: select
+    use:
+      - default
+
+# 规则：只代理 OpenAI / Codex，其余全部直连，不影响其他服务
+rules:
+  - DOMAIN-SUFFIX,openai.com,Proxy
+  - DOMAIN-SUFFIX,api.openai.com,Proxy
+  - DOMAIN-SUFFIX,oaistatic.com,Proxy
+  - DOMAIN-SUFFIX,oaiusercontent.com,Proxy
+  - DOMAIN-KEYWORD,openai,Proxy
+  - DOMAIN-KEYWORD,codex,Proxy
+  - MATCH,DIRECT

@@ -3,6 +3,8 @@ title: "部署个人网站：Docker + Nginx 免费 HTTPS 实战"
 date: "2026-08-15"
 excerpt: "记录 marsmz.top 从 Docker 部署、Nginx 反向代理到使用 acme.sh 免费申请和自动续期 HTTPS 证书的完整过程。"
 tags: ["部署", "Docker", "Nginx", "HTTPS", "acme.sh", "Next.js"]
+series: "deploy"
+seriesTitle: "部署系列"
 ---
 
 拿到一台阿里云服务器和 `marsmz.top` 这个域名之后，第一件事就是把个人网站跑起来。这次采用了更容易按自己习惯定制的 **Docker Compose + Nginx + acme.sh**：Next.js 运行在容器内，Nginx 负责公网入口、反向代理和 HTTPS，acme.sh 负责申请、安装和续期证书。

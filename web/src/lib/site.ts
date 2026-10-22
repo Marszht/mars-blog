@@ -2,8 +2,8 @@ export const site = {
   name: "Mars MZ",
   shortName: "MARS",
   domain: "marsmz.top",
-  title: "Mars MZ · 程序员 & 户外爱好者",
-  tagline: "写代码 · 骑行徒步 · 打羽毛球",
+  title: "Mars MZ · 程序员 & 运动爱好者",
+  tagline: "写代码，也认真生活",
   description:
     "Mars MZ 的个人网站：一名热爱技术的程序员，也是户外与运动爱好者。记录技术思考、骑行徒步、羽毛球训练与日常足迹。",
   email: "hi@marsmz.top",
@@ -16,6 +16,8 @@ export const site = {
     "骑行",
     "徒步",
     "羽毛球",
+    "健身",
+    "力量训练",
     "个人网站",
     "Mars MZ",
     "marsmz",
@@ -28,6 +30,7 @@ export const nav = [
   { href: "/outdoor", label: "户外" },
   { href: "/footprints", label: "足迹" },
   { href: "/blog", label: "博客" },
+  { href: "/now", label: "现在" },
   { href: "/projects", label: "项目" },
   { href: "/contact", label: "联系" },
 ] as const;
